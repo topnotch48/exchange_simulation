@@ -5,5 +5,5 @@ class Order(
     var side: OrderSide,
     var price: Int,
     var quantity: Int,
-    var timestampMs: Long
+    var seq: Long
 )

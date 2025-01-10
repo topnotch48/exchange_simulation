@@ -6,7 +6,7 @@ import io.bitvavo.simulation.models.OrderSide
 import java.util.*
 
 class InMemoryOrderBook : OrderBook {
-    private val orderComparator = compareBy<Order> { it.timestampMs }
+    private val orderComparator = compareBy<Order> { it.seq }
     private val bidOrders = TreeMap<Int, TreeSet<Order>>(compareByDescending { it })
     private val askOrders = TreeMap<Int, TreeSet<Order>>()
     private val orders = HashSet<Int>()
@@ -53,8 +53,8 @@ class InMemoryOrderBook : OrderBook {
     }
 
     override fun getOrderBookSnapshot(): OrderBookSnapshot {
-        val bids = bidOrders.flatMap { (_, orders) -> orders }
-        val asks = askOrders.flatMap { (_, orders) -> orders }
+        val bids = bidOrders.values.flatMap { it.toList() }
+        val asks = askOrders.values.flatMap { it.toList() }
         return OrderBookSnapshot(bids, asks)
     }
 }

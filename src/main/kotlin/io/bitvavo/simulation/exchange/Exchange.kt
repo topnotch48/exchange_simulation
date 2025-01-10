@@ -5,7 +5,8 @@ import io.bitvavo.simulation.models.Trade
 
 interface Exchange : AutoCloseable {
     fun executeCommand(cmd: String)
+    fun snapshot()
     val onTrade: ((trades: List<Trade>) -> Unit)?
-    val onExit: ((orderBook: OrderBookSnapshot) -> Unit)?
+    val onSnapshot: ((orderBook: OrderBookSnapshot) -> Unit)?
     val onFailure: ((reason: String) -> Unit)?
 }

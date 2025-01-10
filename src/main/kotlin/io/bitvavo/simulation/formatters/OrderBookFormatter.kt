@@ -29,7 +29,7 @@ object OrderBookFormatter {
     }
 
     private fun Int.formatQuantity(): String {
-        return String.format("%,11d", this)
+        return String.format("%,11d", this).replace('.', ',')
     }
 
     private fun Int.formatPrice(): String {

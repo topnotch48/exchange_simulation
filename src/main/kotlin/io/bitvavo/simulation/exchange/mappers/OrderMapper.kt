@@ -4,7 +4,7 @@ import io.bitvavo.simulation.models.Order
 import io.bitvavo.simulation.models.OrderSide
 
 object OrderMapper {
-    fun String.tryParseOrder(timestampMs: Long): Result<Order> {
+    fun String.tryParseOrder(seq: Long): Result<Order> {
         val parts = this.split(",")
         if (parts.size != 4)
             return Result.failure(IllegalArgumentException("Invalid order format: '$this'"))
@@ -28,7 +28,7 @@ object OrderMapper {
             side = side,
             price = price,
             quantity = quantity,
-            timestampMs = timestampMs
+            seq = seq
         )
 
         return Result.success(order)

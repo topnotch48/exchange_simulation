@@ -3,7 +3,7 @@ package io.bitvavo.simulation
 import io.bitvavo.simulation.engine.InMemoryMatchingEngine
 import io.bitvavo.simulation.engine.order_book.InMemoryOrderBook
 import io.bitvavo.simulation.exchange.SimulatorExchange
-import io.bitvavo.simulation.exchange.clock.Clock
+import io.bitvavo.simulation.exchange.sequence_generator.CounterGenerator
 import io.bitvavo.simulation.extensions.StreamWriter.writeLine
 import io.bitvavo.simulation.formatters.OrderBookFormatter.formatOrderBook
 import io.bitvavo.simulation.formatters.TradeFormatter.formatTrade
@@ -11,18 +11,18 @@ import java.io.*
 
 fun main() {
     val input = BufferedReader(InputStreamReader(System.`in`))
-    val output = BufferedWriter(OutputStreamWriter(System.out))
-    val logs = BufferedWriter(FileWriter("logs.info", true))
+    val output = PrintWriter(OutputStreamWriter(System.out))
+    val logs = PrintWriter(FileWriter("logs.info", true))
 
     try {
         val simulator = SimulatorExchange(
             engine = InMemoryMatchingEngine(InMemoryOrderBook()),
-            clock = object : Clock { override fun currentTimeMillis() = System.currentTimeMillis() }
+            generator = CounterGenerator()
         )
 
         simulator.onTrade = { trades -> trades.forEach { output.writeLine(formatTrade(it)) } }
         simulator.onFailure = { logs.writeLine(it) }
-        simulator.onExit = { output.writeLine(formatOrderBook(it)) }
+        simulator.onSnapshot = { output.writeLine(formatOrderBook(it)) }
         simulator.use {
             while (true) {
                 try {
