@@ -10,7 +10,8 @@ object OrderMapper {
             return Result.failure(IllegalArgumentException("Invalid order format: '$this'"))
 
         val id = parts[0].toIntOrNull()
-            ?: return Result.failure(IllegalArgumentException("Invalid order ID: '${parts[0]}'"))
+        if (id == null || id < 0)
+            return Result.failure(IllegalArgumentException("Invalid order ID: '${parts[0]}'"))
 
         if (parts[1] != "B" && parts[1] != "S")
             return Result.failure(IllegalArgumentException("Invalid order side: '${parts[1]}'"))
@@ -18,10 +19,12 @@ object OrderMapper {
         val side = if (parts[1] == "B") OrderSide.Buy else OrderSide.Sell
 
         val price = parts[2].toIntOrNull()
-            ?: return Result.failure(IllegalArgumentException("Invalid order price: '${parts[2]}'"))
+        if (price == null || price <= 0)
+            return Result.failure(IllegalArgumentException("Invalid order price: '${parts[2]}'"))
 
         val quantity = parts[3].toIntOrNull()
-            ?: return Result.failure(IllegalArgumentException("Invalid order quantity: '${parts[3]}'"))
+        if (quantity == null || quantity <= 0)
+            return Result.failure(IllegalArgumentException("Invalid order quantity: '${parts[3]}'"))
 
         val order = Order(
             id = id,

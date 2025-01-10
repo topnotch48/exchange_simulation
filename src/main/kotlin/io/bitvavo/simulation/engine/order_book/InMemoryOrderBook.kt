@@ -5,13 +5,16 @@ import io.bitvavo.simulation.models.OrderBookSnapshot
 import io.bitvavo.simulation.models.OrderSide
 import java.util.*
 
+typealias OrderPrice = Int
+typealias OrderId = Int
+
 class InMemoryOrderBook : OrderBook {
     private val orderComparator = compareBy<Order> { it.seq }
-    private val bidOrders = TreeMap<Int, TreeSet<Order>>(compareByDescending { it })
-    private val askOrders = TreeMap<Int, TreeSet<Order>>()
-    private val orders = HashSet<Int>()
+    private val bidOrders = TreeMap<OrderPrice, TreeSet<Order>>(compareByDescending { it })
+    private val askOrders = TreeMap<OrderPrice, TreeSet<Order>>()
+    private val orders = HashSet<OrderId>()
 
-    override fun contains(orderId: Int): Boolean {
+    override fun contains(orderId: OrderId): Boolean {
         return orders.contains(orderId)
     }
 

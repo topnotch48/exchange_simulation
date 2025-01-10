@@ -41,6 +41,7 @@ tasks.named<JavaExec>("run") {
 
 dependencies {
     testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.0")
 }
 
 tasks.test {
